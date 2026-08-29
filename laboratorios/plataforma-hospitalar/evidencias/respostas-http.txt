@@ -1,0 +1,58 @@
+﻿=== Evidencias HTTP - coleta 2026-08-29T00:53:14.1937483-03:00 ===
+--- POST /elegibilidades valido -> 202 + Location ---
+HTTP/1.1 202 Accepted
+date: Sat, 29 Aug 2026 03:53:13 GMT
+server: uvicorn
+content-length: 116
+content-type: application/json
+location: /elegibilidades/4fae638e-e10b-4561-9223-d545d247f870
+
+{"protocolo":"4fae638e-e10b-4561-9223-d545d247f870","situacao":"recebida","criado_em":"2026-08-29T03:53:14.273628Z"}
+
+--- GET no Location devolvido -> 200 ---
+HTTP/1.1 200 OK
+date: Sat, 29 Aug 2026 03:53:13 GMT
+server: uvicorn
+content-length: 116
+content-type: application/json
+
+{"protocolo":"4fae638e-e10b-4561-9223-d545d247f870","situacao":"recebida","criado_em":"2026-08-29T03:53:14.273628Z"}
+
+--- POST sem cpf -> 422 dados_invalidos ---
+HTTP/1.1 422 Unprocessable Entity
+date: Sat, 29 Aug 2026 03:53:13 GMT
+server: uvicorn
+content-length: 160
+content-type: application/json
+
+{"codigo":"dados_invalidos","mensagem":"A requisição não atende ao contrato.","detalhes":[{"campo":"body.cpf","mensagem":"Field required","tipo":"missing"}]}
+
+--- POST com campo fora do contrato -> 422 ---
+HTTP/1.1 422 Unprocessable Entity
+date: Sat, 29 Aug 2026 03:53:13 GMT
+server: uvicorn
+content-length: 201
+content-type: application/json
+
+{"codigo":"dados_invalidos","mensagem":"A requisição não atende ao contrato.","detalhes":[{"campo":"body.campo_nao_contratado","mensagem":"Extra inputs are not permitted","tipo":"extra_forbidden"}]}
+
+--- POST com cpf '123' (mesmo valor da falha deliberada do Spectral) -> 422 ---
+HTTP/1.1 422 Unprocessable Entity
+date: Sat, 29 Aug 2026 03:53:13 GMT
+server: uvicorn
+content-length: 201
+content-type: application/json
+
+{"codigo":"dados_invalidos","mensagem":"A requisição não atende ao contrato.","detalhes":[{"campo":"body.cpf","mensagem":"String should match pattern '^\\d{11}$'","tipo":"string_pattern_mismatch"}]}
+
+--- GET protocolo inexistente -> 404 ---
+HTTP/1.1 404 Not Found
+date: Sat, 29 Aug 2026 03:53:13 GMT
+server: uvicorn
+content-length: 112
+content-type: application/json
+
+{"codigo":"elegibilidade_nao_encontrada","mensagem":"Protocolo de elegibilidade não encontrado.","detalhes":[]}
+
+--- Contrato GERADO pela aplicacao (amostra de /openapi.json) ---
+{"openapi":"3.1.0","info":{"title":"API de elegibilidades da plataforma hospitalar","version":"1.0.0"},"paths":{"/elegibilidades":{"post":{"summary":"Aceita uma consulta de elegibilidade","operationId":"criarElegibilidade","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/PedidoElegibilidade"}}},"required":true},"responses":{"202":{"description":"Pedido aceito pa

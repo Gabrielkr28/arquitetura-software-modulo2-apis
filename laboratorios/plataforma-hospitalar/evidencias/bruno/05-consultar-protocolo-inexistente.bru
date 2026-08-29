@@ -1,0 +1,18 @@
+meta {
+  name: 05 Consultar protocolo inexistente (404)
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/elegibilidades/protocolo-inexistente
+  body: none
+  auth: none
+}
+
+tests {
+  test("estado desconhecido e 404 explicito, nao decisao presumida", function () {
+    expect(res.getStatus()).to.equal(404);
+    expect(res.body.codigo).to.equal("elegibilidade_nao_encontrada");
+  });
+}

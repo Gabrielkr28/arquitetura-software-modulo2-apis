@@ -1,0 +1,36 @@
+===============================================================
+ Extensao: gateway Ocelot (.NET) - modulo 2 (APIs)
+ SDK: dotnet 9.0.200 | Ocelot 25.0.0
+ ClienteService :5001 | ProdutoService :5002 | OcelotGateway :4000
+ Coleta: 2026-08-29T03:46:45Z
+===============================================================
+
+--- 1) Consulta de clientes PELO GATEWAY (consumidor nao conhece a porta 5001) ---
+$ curl -i http://localhost:4000/api/clientes
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Sat, 29 Aug 2026 03:46:45 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+[{"id":1,"nome":"João Silva"},{"id":2,"nome":"Maria Oliveira"}]
+
+--- 2) Consulta de produtos PELO GATEWAY (consumidor nao conhece a porta 5002) ---
+$ curl -i http://localhost:4000/api/produtos
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Sat, 29 Aug 2026 03:46:45 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+[{"id":1,"nome":"Produto A"},{"id":2,"nome":"Produto B"}]
+
+--- 3) Rota nao declarada no ocelot.json -> 404 do gateway ---
+$ curl -s -o /dev/null -w '%{http_code}' http://localhost:4000/api/inexistente
+404
+
+--- 4) Servicos downstream respondendo direto (apenas para comparacao) ---
+$ curl -s http://localhost:5001/clientes
+[{"id":1,"nome":"João Silva"},{"id":2,"nome":"Maria Oliveira"}]
+$ curl -s http://localhost:5002/produtos
+[{"id":1,"nome":"Produto A"},{"id":2,"nome":"Produto B"}]

@@ -1,0 +1,19 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/clientes",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 5001 }],
+      "UpstreamPathTemplate": "/api/clientes"
+    },
+    {
+      "DownstreamPathTemplate": "/produtos",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 5002 }],
+      "UpstreamPathTemplate": "/api/produtos"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:4000"
+  }
+}

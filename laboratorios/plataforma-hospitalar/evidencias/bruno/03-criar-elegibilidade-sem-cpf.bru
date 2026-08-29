@@ -1,0 +1,36 @@
+meta {
+  name: 03 Criar elegibilidade sem cpf (422)
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/elegibilidades
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "codigo_operadora": "OPS-001",
+    "matricula_plano": "MAT-2026-001"
+  }
+}
+
+tests {
+  test("rejeita o pedido com 422", function () {
+    expect(res.getStatus()).to.equal(422);
+  });
+
+  test("o erro faz parte do contrato: codigo dados_invalidos", function () {
+    expect(res.body.codigo).to.equal("dados_invalidos");
+  });
+
+  test("aponta o campo ausente", function () {
+    expect(res.body.detalhes.map(function (d) { return d.campo; })).to.include("body.cpf");
+  });
+}

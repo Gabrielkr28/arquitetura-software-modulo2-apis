@@ -1,0 +1,44 @@
+﻿### Contrato EXPLICITO (contratos/openapi.yaml)
+  openapi: 3.1.0
+  info keys: ['contact', 'description', 'title', 'version']
+  tem 'tags' no topo: True
+  tem 'servers': True
+  paths: ['/elegibilidades', '/elegibilidades/{protocolo}']
+  post.operationId: criarElegibilidade
+  post.tags: ['Elegibilidades']
+  post.description presente: True
+  post.requestBody tem examples: True
+  post.responses: ['202', '422']
+  202.description: Pedido aceito para processamento.
+  202 tem headers.Location: True
+  202 tem examples: True
+  get.responses: ['200', '404']
+  PedidoElegibilidade.required: ['codigo_operadora', 'cpf', 'matricula_plano']
+  PedidoElegibilidade.additionalProperties: False
+  cpf.pattern: ^\d{11}$
+
+### Contrato GERADO (app.openapi())
+  openapi: 3.1.0
+  info keys: ['title', 'version']
+  tem 'tags' no topo: False
+  tem 'servers': False
+  paths: ['/elegibilidades', '/elegibilidades/{protocolo}']
+  post.operationId: criarElegibilidade
+  post.tags: None
+  post.description presente: False
+  post.requestBody tem examples: False
+  post.responses: ['202', '422']
+  202.description: Pedido aceito para processamento.
+  202 tem headers.Location: True
+  202 tem examples: False
+  get.responses: ['200', '404', '422']
+  PedidoElegibilidade.required: ['codigo_operadora', 'cpf', 'matricula_plano']
+  PedidoElegibilidade.additionalProperties: False
+  cpf.pattern: ^\d{11}$
+
+### Schemas presentes
+  explicito: ['DetalheErro', 'ElegibilidadeAceita', 'ErroAPI', 'PedidoElegibilidade']
+  gerado   : ['DetalheErro', 'ElegibilidadeAceita', 'ErroAPI', 'HTTPValidationError', 'PedidoElegibilidade', 'ValidationError']
+
+### Caminhos so no gerado (rotas fora do contrato publicado)
+  []

@@ -1,0 +1,30 @@
+meta {
+  name: 04 Criar elegibilidade com campo fora do contrato (422)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/elegibilidades
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "cpf": "12345678901",
+    "codigo_operadora": "OPS-001",
+    "matricula_plano": "MAT-2026-001",
+    "campo_nao_contratado": "valor"
+  }
+}
+
+tests {
+  test("o contrato explicito proibe propriedades adicionais", function () {
+    expect(res.getStatus()).to.equal(422);
+  });
+}
