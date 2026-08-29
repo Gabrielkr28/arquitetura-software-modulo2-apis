@@ -74,7 +74,30 @@ pontos e falha se divergirem. A concordância é uma propriedade testada, não u
 
 ---
 
-## 3. Falha deliberada do Spectral (documentada)
+## 3. Leitura das regras do `.spectral.yaml`
+
+O laboratório estende `spectral:oas` e eleva três regras a `error`. Cada uma existe para servir a
+alguém específico:
+
+| Regra | A quem serve | O que quebra sem ela |
+|---|---|---|
+| `operation-operationId` | automação | geradores de SDK e clientes precisam de um nome estável por operação; sem ele, o nome vira o caminho HTTP e muda a cada refatoração de rota |
+| `operation-description` | consumidor humano | `summary` diz *o que*; `description` é onde cabe o *quando* e o *com que consequência* — sem ela, o consumidor descobre o comportamento por tentativa |
+| `operation-tags` | navegação e organização | sem tag, o Swagger UI joga tudo em `default` e a API deixa de ter estrutura assim que passa de meia dúzia de operações |
+
+**Regra semântica que o linter não conseguiria decidir sozinho:** se `202 Accepted` é o status
+*certo* para esta operação. O Spectral verifica que a resposta está declarada, descrita e que o
+exemplo casa com o schema — mas não tem como saber que a plataforma apenas *aceita* o pedido e que
+a decisão de elegibilidade virá depois. Trocar o `202` por `200` com um corpo `{"elegivel": true}`
+passaria em todas as regras e estaria arquiteturalmente errado. O mesmo vale para a escolha de
+`Location` em vez de o consumidor montar a URL, para o significado de `situacao: recebida` e para a
+decisão de que `matricula_plano` é dado da operadora. Lint é sobre a **forma** do documento;
+essas são decisões de **significado**, e continuam sendo trabalho humano — é exatamente por isso
+que elas viram ADR e não regra de linter.
+
+---
+
+## 4. Falha deliberada do Spectral (documentada)
 
 **Alteração:** em uma cópia do contrato (`evidencias/openapi-experimento.yaml`), o exemplo de
 mídia `paths./elegibilidades.post.requestBody.content.application/json.examples.pedidoValido.value.cpf`
@@ -107,7 +130,7 @@ existe para vigiar: alterar um lado sem o outro é a forma mais comum de o contr
 
 ---
 
-## 4. Extensão: gateway Ocelot
+## 5. Extensão: gateway Ocelot
 
 Três projetos .NET (`ClienteService` :5001, `ProdutoService` :5002, `OcelotGateway` :4000) com
 roteamento declarado em `ocelot.json`. Resultado capturado em
@@ -131,7 +154,7 @@ padrão do SDK.
 
 ---
 
-## 5. Respostas às questões exploratórias
+## 6. Respostas às questões exploratórias
 
 **1. O que o `202` permite que o provedor altere sem quebrar o consumidor?**
 O `202` diz "aceitei e vou processar", não "decidi". Isso libera o provedor para mudar tudo o que
