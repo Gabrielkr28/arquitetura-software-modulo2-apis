@@ -17,3 +17,6 @@ Thumbs.db
 
 # Node (spectral via npx)
 node_modules/
+
+# Arquivos de bloqueio do Word
+~$*
